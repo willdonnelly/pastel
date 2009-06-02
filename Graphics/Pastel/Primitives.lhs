@@ -56,7 +56,7 @@ the first color with the second, and pass everything else untouched.
 > tint a b f (x,y) = let v = f (x,y) in if v == a then b else v
 
 Gradient mixes the given color with the drawing below it, fading
-out as it moves right.
+in as it moves right.
 
 > gradient :: Color -> Drawing -> Drawing
 > gradient c f (x,y) = (c `colorScale` p) `colorAdd` (f (x,y) `colorScale` q)
