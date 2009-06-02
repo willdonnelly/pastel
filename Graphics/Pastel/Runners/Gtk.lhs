@@ -6,14 +6,14 @@
 > import Graphics.Pastel
 > import Graphics.Pastel.Draw.Gtk
 
-> runGtk :: IO ()
-> runGtk = do
+> runGtk :: (Int, Int) -> Drawing -> IO ()
+> runGtk (w,h) d = do
 >     initGUI
 >
 >     window <- windowNew
 >     set window [windowTitle := "Pastel Gtk Runner"]
 >
->     pixbuf <- drawGtkPixbufXPM (1024, 1024) $ circle $ canvas white
+>     pixbuf <- drawGtkPixbufXPM (w,h) $ d
 >     image <- imageNewFromPixbuf pixbuf
 >     containerAdd window image
 >
