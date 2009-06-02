@@ -6,4 +6,4 @@
 > import Shapes
 
 > main = do
->     putStr $ drawPixmap (1024, 1024) $ circle $ canvas black
+>     putStr $ drawPixmap (128, 128) $ circle $ canvas black

@@ -1,12 +1,13 @@
 > module DrawUtils
 >    ( pointField
+>    , evenInterval
 >    , pixelToInt
 >    , intImage
 >    , palettize
->    , evenInterval
 >    ) where
 
 > import Data.List
+> import Data.Array
 > import Types
 
 > pointField :: (Int, Int) -> Drawing -> [[Point]]
@@ -23,14 +24,25 @@
 > pixelToInt (Point a (RGB r g b)) = truncate $ r*256*256*255 + g*256*255 + b*255
 > pixelToInt (Point a (BnW v))     = truncate $ v*256*256*255 + v*256*255 + v*255
 
-> intImage :: [[Point]] -> [Int]
-> intImage ps = concat $ map (map pixelToInt) ps
+> intImage :: [[Point]] -> [[Int]]
+> intImage = map (map pixelToInt)
 
-> palettize :: Int -> [Int] -> ([Int], [Int])
-> palettize paletteSize imageData = (map closest imageData, palette)
->     where palette = take paletteSize $ snd $ unzip $ reverse $ sort $ map listLength $ group $ sort imageData
->           closest n = foldl1 (takeCloser n) palette
->           takeCloser n x y = if (abs $ n - x) < (abs $ n - y)
->                                 then x
->                                 else y
->           listLength xs = (length xs, head xs)
+> palettize :: [[Int]] -> ([[Int]], Array Int Int, Int)
+> palettize image = (map (map convPal) image, lookups, succ nColors)
+>     where lookups = listArray (0,nColors) palette
+>           nColors = pred $ length palette
+>           palette = nub $ concat image
+>           convPal x = binarySearch lookups (0, nColors) x
+
+> binarySearch :: Array Int Int -> (Int, Int) -> Int -> Int
+> binarySearch array (min, max) value
+>     | not $ inRange (bounds array) $ min = error "Minimum array index out of range."
+>     | not $ inRange (bounds array) $ max = error "Maximum array index out of range."
+>     | not $ inRange (bounds array) $ mid = error "Midpoint array index out of range."
+>     | array ! min == value = min
+>     | array ! max == value = max
+>     | otherwise = case array ! mid `compare` value of
+>                        EQ -> mid
+>                        LT -> binarySearch array (min, pred mid) value
+>                        GT -> binarySearch array (succ mid, max) value
+>     where mid = (min + max) `div` 2
