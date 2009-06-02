@@ -63,7 +63,7 @@ the first color with the second, and pass everything else untouched.
 
 > gradientRadial :: Color -> Drawing -> Drawing
 > gradientRadial c f (x,y) = (c `colorScale` p) `colorAdd` (f (x,y) `colorScale` q)
->     where p = x*x + y*y
+>     where p = (x*x + y*y) / 2
 >           q = 1 - p
 
 The canvas function is what actually allows us to draw stuff.
