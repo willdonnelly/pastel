@@ -2,7 +2,8 @@
 >     ( circle, square, polygon
 >     , rotate, translate
 >     , zoom, scale
->     , tint, gradient, canvas
+>     , gradientLinear, gradientRadial
+>     , tint, canvas
 >     ) where
 
 > import Graphics.Pastel.Types
@@ -55,12 +56,14 @@ the first color with the second, and pass everything else untouched.
 > tint :: Color -> Color -> Drawing -> Drawing
 > tint a b f (x,y) = let v = f (x,y) in if v == a then b else v
 
-Gradient mixes the given color with the drawing below it, fading
-in as it moves right.
-
-> gradient :: Color -> Drawing -> Drawing
-> gradient c f (x,y) = (c `colorScale` p) `colorAdd` (f (x,y) `colorScale` q)
+> gradientLinear :: Color -> Drawing -> Drawing
+> gradientLinear c f (x,y) = (c `colorScale` p) `colorAdd` (f (x,y) `colorScale` q)
 >     where p = (x + 1) / 2
+>           q = 1 - p
+
+> gradientRadial :: Color -> Drawing -> Drawing
+> gradientRadial c f (x,y) = (c `colorScale` p) `colorAdd` (f (x,y) `colorScale` q)
+>     where p = x*x + y*y
 >           q = 1 - p
 
 The canvas function is what actually allows us to draw stuff.
