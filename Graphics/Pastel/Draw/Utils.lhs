@@ -1,4 +1,4 @@
-> module DrawUtils
+> module Graphics.Pastel.Draw.Utils
 >    ( pointField
 >    , evenInterval
 >    , pixelToInt
@@ -8,7 +8,7 @@
 
 > import Data.List
 > import Data.Array
-> import Types
+> import Graphics.Pastel.Types
 
 > pointField :: (Int, Int) -> Drawing -> [[Point]]
 > pointField (width, height) drawing = map pixelLine $ evenInterval height

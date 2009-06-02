@@ -1,9 +1,10 @@
-> module DrawPixmap
+> module Graphics.Pastel.Draw.XPM
 >     ( drawPixmap
 >     ) where
 
-> import Types
-> import DrawUtils
+> import Graphics.Pastel.Types
+> import Graphics.Pastel.Draw.Utils
+
 > import Numeric
 > import Data.Maybe
 > import Data.List

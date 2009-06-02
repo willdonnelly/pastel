@@ -1,9 +1,9 @@
-> module Colors
+> module Graphics.Pastel.Colors
 >     ( black
 >     , white
 >     ) where
 
-> import Types
+> import Graphics.Pastel.Types
 
 > black = (Point 1 (RGB 0 0 0))
 > white = (Point 1 (RGB 1 1 1))

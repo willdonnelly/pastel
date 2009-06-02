@@ -1,12 +1,11 @@
-> module DrawAscii
+> module Graphics.Pastel.Draw.Ascii
 >     ( drawAscii
 >     ) where
 
-> import Types
-> import Data.List
-> import DrawUtils
+> import Graphics.Pastel.Draw.Utils
+> import Graphics.Pastel.Types
 
- drawAscii :: (Int, Int) -> Drawing -> String
+> import Data.List
 
 > drawAscii (width, height) drawing = unlines $ map (map ascii) $ points
 >     where points = pointField (width, height) drawing

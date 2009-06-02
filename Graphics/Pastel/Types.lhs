@@ -1,4 +1,4 @@
-> module Types
+> module Graphics.Pastel.Types
 >     ( Drawing
 >     , Shape
 >     , Point (..)

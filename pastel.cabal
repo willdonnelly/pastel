@@ -1,0 +1,40 @@
+Name:          Pastel
+Version:       0.1
+Category:      Graphics
+Synopsis:      A composable image generation library with extensive output support.
+
+Description:   Pastel is an image generation library written in a functional style.
+               Complete images are represented as functions from 2D coordinates to
+               color values. The essential difference between Pastel and other systems,
+               such as Chalkboard and Pan, is that Pastel represents primitive shapes
+               and image transforms both as functions from images to other images,
+               allowing complex images to be chained together with Haskell's native
+               syntax for function composition. Pastel is also designed with extensive
+               support for different input and output methods, currently supporting
+               XPM file output and GTK Pixbuf generation.
+
+Homepage:      http://github.com/willdonnelly/pastel
+Bug-Reports:   http://github.com/willdonnelly/pastel/issues
+Stability:     alpha
+Author:        Will Donnelly
+Maintainer:    Will Donnelly <will.donnelly@gmail.com>
+Copyright:     (c) 2009 Will Donnelly
+License:       BSD3
+License-File:  LICENSE
+
+Build-Type:    Simple
+Cabal-Version: >= 1.2
+
+library
+  Exposed-Modules: Graphics.Pastel,
+                   Graphics.Pastel.Draw.XPM,
+                   Graphics.Pastel.Draw.Gtk
+                   Graphics.Pastel.Draw.Ascii,
+                   Graphics.Pastel.Draw.Utils,
+                   Graphics.Pastel.Runners.XPM,
+                   Graphics.Pastel.Runners.Gtk
+  Build-Depends:   array, base, gtk
+
+source-repository head
+  type:      git
+  location:  git://github.com/willdonnelly/pastel.git

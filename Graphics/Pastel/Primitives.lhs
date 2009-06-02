@@ -1,10 +1,10 @@
-> module Shapes
+> module Graphics.Pastel.Primitives
 >     ( circle
 >     , canvas
 >     ) where
 
-> import Types
-> import Colors
+> import Graphics.Pastel.Types
+> import Graphics.Pastel.Colors
 
 > circle :: Drawing -> Drawing
 > circle f (x,y) = if x*x + y*y < 1.0

@@ -1,29 +1,19 @@
-GTK Drawing Procedures:
-
-  1. Generate XPM, load that.
-     * Pros
-       - Guaranteed to work, basically
-     * Cons
-       - Slow, ugly
-  2. Use inline data methods
-     * pixbufNewFromInline
-     * pixbufCopy
-     * Pros
-       - Fast, powerful
-     * Cons
-       - Possibly brittle and/or unsafe
-     * We'll have to wait and see
-
-Any reason I can't do both?
-
-> module DrawGtk
+> module Graphics.Pastel.Draw.Gtk
 >     ( drawGtkPixbufRaw
 >     , drawGtkPixbufXPM
 >     ) where
 
-> import Types
-> import DrawPixmap
+> import Graphics.Pastel.Types
+> import Graphics.Pastel.Draw.XPM
+
 > import Graphics.UI.Gtk
+
+This method generates the image data in memory, and then
+turns it into a pixbuf using the `pixbufNewFromInline`
+function. Since the function is hard-coded not to copy
+the inline image data, we manually copy it next. The
+docs say that `pixbufCopy` performs a 'deep copy', so
+I interpret this to mean it copies the underlying data.
 
 > drawGtkPixbufRaw :: (Int, Int) -> Drawing -> IO Pixbuf
 > drawGtkPixbufRaw = undefined
