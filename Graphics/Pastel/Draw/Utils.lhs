@@ -37,21 +37,15 @@
 >           scale x = (fromIntegral (x * 2)) / (fromIntegral n)
 
 > palettize :: [[Int]] -> ([[Int]], Array Int Int, Int)
-> palettize image = (map (map convPal) image, lookups, succ nColors)
->     where lookups = listArray (0,nColors) palette
->           nColors = pred $ length palette
->           palette = nub $ concat image
->           convPal x = binarySearch lookups (0, nColors) x
+> palettize image = (map (map convert) image, to, num)
+>     where (num, to, from) = makeLookups image
+>           convert x = from ! x
 
-> binarySearch :: Array Int Int -> (Int, Int) -> Int -> Int
-> binarySearch array (min, max) value
->     | not $ inRange (bounds array) $ min = error "Minimum array index out of range."
->     | not $ inRange (bounds array) $ max = error "Maximum array index out of range."
->     | not $ inRange (bounds array) $ mid = error "Midpoint array index out of range."
->     | array ! min == value = min
->     | array ! max == value = max
->     | otherwise = case array ! mid `compare` value of
->                        EQ -> mid
->                        LT -> binarySearch array (min, pred mid) value
->                        GT -> binarySearch array (succ mid, max) value
->     where mid = (min + max) `div` 2
+> makeLookups :: [[Int]] -> (Int, Array Int Int, Array Int Int)
+> makeLookups image = (succ colorNum, toArray, fromArray)
+>     where colorNum = pred $ length colors
+>           colorMax = maximum colors
+>           colorMin = minimum colors
+>           colors = nub $ concat image
+>           toArray = array (0, colorNum) $ zip [0..] colors
+>           fromArray = array (colorMin, colorMax) $ sort $ zip colors [0..]
