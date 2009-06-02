@@ -36,16 +36,22 @@
 >     where shift x = x - (n `div` 2)
 >           scale x = (fromIntegral (x * 2)) / (fromIntegral n)
 
-> palettize :: [[Int]] -> ([[Int]], Array Int Int, Int)
-> palettize image = (map (map convert) image, to, num)
->     where (num, to, from) = makeLookups image
->           convert x = from ! x
+> palettize :: [[Int]] -> ([[Int]], [(Int, Int)], Int)
+> palettize image = (breakUp $ out, table, num)
+>     where (out, table, num) = handScan $ concat image
+>           width = length $ head image
+>           breakUp = takeWhile (not . null) . unfoldr (Just . splitAt width)
 
-> makeLookups :: [[Int]] -> (Int, Array Int Int, Array Int Int)
-> makeLookups image = (succ colorNum, toArray, fromArray)
->     where colorNum = pred $ length colors
->           colorMax = maximum colors
->           colorMin = minimum colors
->           colors = nub $ concat image
->           toArray = array (0, colorNum) $ zip [0..] colors
->           fromArray = array (colorMin, colorMax) $ sort $ zip colors [0..]
+The table is a list of (index, color) pairs, despite what
+a casual reading of the source might imply. Notice the
+map in the output function reverses the pairs.
+
+> handScan :: [Int] -> ([Int], [(Int, Int)], Int)
+> handScan xs = output $ foldl scanElem ([], [], 0) xs
+
+> scanElem (out, table, num) x =
+>               case x `lookup` table of
+>                    Nothing -> (num:out, (x,num):table, succ num)
+>                    Just y  -> (y:out, table, num)
+> output (out, table, num) =
+>               (reverse out, sort $ map (\(x,y) -> (y,x)) table, num)
