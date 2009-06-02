@@ -3,7 +3,7 @@
 >     , drawGtkPixbufXPM
 >     ) where
 
-> import Graphics.Pastel.Types
+> import Graphics.Pastel
 > import Graphics.Pastel.Draw.XPM
 
 > import Graphics.UI.Gtk

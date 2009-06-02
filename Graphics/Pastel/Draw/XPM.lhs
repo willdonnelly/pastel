@@ -2,7 +2,7 @@
 >     ( drawPixmap
 >     ) where
 
-> import Graphics.Pastel.Types
+> import Graphics.Pastel
 > import Graphics.Pastel.Draw.Utils
 
 > import Numeric
