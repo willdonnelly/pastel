@@ -23,7 +23,7 @@
 >               where paletteLine (i,c) = hexOut indexSize i ++ " c #" ++ hexOut 6 c
 >           image = map imageLine pImage
 >               where imageLine xs = concat $ map (hexOut indexSize) xs
->           indexSize = ceiling $ log (succ $ fromIntegral pSize) / (8 * log 2)
+>           indexSize = ceiling $ log (succ $ fromIntegral pSize) / (4 * log 2)
 >           (pImage, pLookup, pSize) = palettize $ intField (width, height) drawing
 
 > splitLength x = takeWhile (not . null) . unfoldr (Just . splitAt x)
