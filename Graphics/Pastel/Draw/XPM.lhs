@@ -24,6 +24,6 @@
 >           image = map imageLine pImage
 >               where imageLine xs = concat $ map (hexOut indexSize) xs
 >           indexSize = ceiling $ log (succ $ fromIntegral pSize) / (8 * log 2)
->           (pImage, pLookup, pSize) = palettize $ intImage $ pointField (width, height) drawing
+>           (pImage, pLookup, pSize) = palettize $ intField (width, height) drawing
 
 > splitLength x = takeWhile (not . null) . unfoldr (Just . splitAt x)

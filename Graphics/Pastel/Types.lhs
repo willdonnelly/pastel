@@ -1,35 +1,18 @@
 > module Graphics.Pastel.Types
->     ( Drawing
->     , Shape
->     , Point (..)
->     , Color (..)
->     , asRGB
+>     ( Drawing, Shape, Color (..)
 >     ) where
 
 A drawing is a complete image. It is represented as a function
-from a coordinate to a point.
+from a coordinate to a color value.
 
-> type Drawing = (Float, Float) -> Point
+> type Drawing = (Float, Float) -> Color
 
-A shape, on the other hand, is a function from a drawing to a
-drawing. This allows easy function composition and layering,
-unlike a naive representation, which would require some sort
-of helper function.
+A primitive is a function from a drawing to a drawing. This makes
+composing primitives into images incredibly easy.
 
 > type Shape = Drawing -> Drawing
 
-A point in the image consists of a transparency value and a
-color value. The use of the word 'color' here is somewhat
-inaccurate, as it includes both color and grayscale values.
+The use of the word 'color' here is a little bit inaccurate, as
+this datatype encompasses both color and grayscale values.
 
-> data Point = Point Alpha Color deriving (Show, Eq, Ord)
-
-> type Alpha = Float
-
-> data Color = RGB Float Float Float
->            | BnW Float
->            deriving (Show, Eq, Ord)
-
-> asRGB :: Color -> Color
-> asRGB (BnW v) = RGB v v v
-> asRGB (RGB r g b) = RGB r g b
+> data Color = RGB Float Float Float deriving (Show, Eq, Ord)
