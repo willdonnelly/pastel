@@ -11,8 +11,8 @@
 > import Data.Array
 
 > hexOut :: Int -> Int -> String
-> hexOut l x = pad ++ hex
->     where pad = replicate (l - (length hex)) '0'
+> hexOut l x = (replicate padLen '0') ++ hex
+>     where padLen = l - length hex
 >           hex = showHex x ""
 
 > drawPixmap :: (Int, Int) -> Drawing -> String

@@ -19,4 +19,4 @@ this datatype encompasses both color and grayscale values.
 
 > (RGB a b c) `colorAdd` (RGB x y z) = RGB (hold (a+x)) (hold (b+y)) (hold (c+z))
 > (RGB a b c) `colorScale` s = RGB (hold (a*s)) (hold (b*s)) (hold (c*s))
-> hold x = min (max x 0) 1
+> hold x = if x < 0 then 0 else if x > 1 then 1 else x
