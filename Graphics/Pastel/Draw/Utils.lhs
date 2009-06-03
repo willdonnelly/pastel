@@ -12,9 +12,10 @@
 > import Data.Bits
 
 > colorField :: (Int, Int) -> Drawing -> [[Color]]
-> colorField (width, height) drawing = map pixelLine $ evenInterval height
->     where pixelLine x = map drawing $ indices x
->           indices x = zip (evenInterval width) $ repeat x
+> colorField (width, height) drawing = map line tallIdx
+>     where line x = map drawing $ zip wideIdx $ repeat x
+>           wideIdx = evenInterval width
+>           tallIdx = evenInterval height
 
 > intField :: (Int, Int) -> Drawing -> [[Int]]
 > intField (w,h) d = map (map colorToInt) $ colorField (w,h) d

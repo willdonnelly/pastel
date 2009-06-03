@@ -8,8 +8,7 @@
 > import qualified Data.ByteString as BS
 
 > rawOutput :: (Int, Int) -> Drawing -> BS.ByteString
-> rawOutput (w,h) d = BS.pack $ image
->     where image = foldl assembleBytes [] $ reverse colors
->           colors = concat $ colorField (w,h) d
+> rawOutput (w,h) d = BS.pack $ foldl assembleBytes [] $ reverse colors
+>     where colors = concat $ colorField (w,h) d
 
 > assembleBytes xs (RGB r g b) = r:g:b:xs
