@@ -8,7 +8,7 @@
 > import Graphics.Pastel
 
 > import Data.List
-> import Data.Array
+> import qualified Data.Map as Map
 > import Data.Bits
 
 > colorField :: (Int, Int) -> Drawing -> [[Color]]
@@ -37,21 +37,20 @@
 >           scale x = (fromIntegral (x * 2)) / (fromIntegral n)
 
 > palettize :: [[Int]] -> ([[Int]], [(Int, Int)], Int)
-> palettize image = (breakUp $ out, table, num)
->     where (out, table, num) = handScan $ concat image
+> palettize image = (breakUp out, table, num)
+>     where (out, table, num) = paletteConvert $ concat image
 >           width = length $ head image
 >           breakUp = takeWhile (not . null) . unfoldr (Just . splitAt width)
 
-The table is a list of (index, color) pairs, despite what
-a casual reading of the source might imply. Notice the
-map in the output function reverses the pairs.
+> paletteConvert :: [Int] -> ([Int], [(Int, Int)], Int)
+> paletteConvert xs = output $ foldl paletteFold ([], Map.empty, 0) xs
 
-> handScan :: [Int] -> ([Int], [(Int, Int)], Int)
-> handScan xs = output $ foldl scanElem ([], [], 0) xs
+> paletteFold :: ([Int], Map.Map Int Int, Int) -> Int -> ([Int], Map.Map Int Int, Int)
+> paletteFold (output, table, number) value =
+>     case value `Map.lookup` table of
+>          Nothing -> (number:output, Map.insert value number table, succ number)
+>          Just ix -> (ix:output, table, number)
 
-> scanElem (out, table, num) x =
->               case x `lookup` table of
->                    Nothing -> (num:out, (x,num):table, succ num)
->                    Just y  -> (y:out, table, num)
-> output (out, table, num) =
->               (reverse out, sort $ map (\(x,y) -> (y,x)) table, num)
+> output :: ([Int], Map.Map Int Int, Int) -> ([Int], [(Int, Int)], Int)
+> output (output, table, number) = (reverse output, reversePairs $ Map.assocs table, number)
+>     where reversePairs = map (\(x,y) -> (y,x))
