@@ -21,15 +21,15 @@
 
 > colorToInt :: Color -> Int
 > colorToInt (RGB r g b) = r' .|. g' .|. b'
->     where r' = (truncate $ r * 0xFF) `shiftL` 16
->           g' = (truncate $ g * 0xFF) `shiftL` 8
->           b' = (truncate $ b * 0xFF)
+>     where r' = fromIntegral $ r `shiftL` 16
+>           g' = fromIntegral $ g `shiftL` 8
+>           b' = fromIntegral $ b
 
 > intToColor :: Int -> Color
 > intToColor x = RGB r g b
->     where r = (/0xFF) $ fromIntegral $ x .&. 0xFF0000 `shiftR` 16
->           g = (/0xFF) $ fromIntegral $ x .&. 0x00FF00 `shiftR` 8
->           b = (/0xFF) $ fromIntegral $ x .&. 0x0000FF
+>     where r = fromIntegral $ x .&. 0xFF0000 `shiftR` 16
+>           g = fromIntegral $ x .&. 0x00FF00 `shiftR` 8
+>           b = fromIntegral $ x .&. 0x0000FF
 
 > evenInterval :: Int -> [Float]
 > evenInterval n = map (scale . shift) $ take n [0..]

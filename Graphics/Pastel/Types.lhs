@@ -2,6 +2,8 @@
 >     ( Drawing, Shape, Color (..), colorAdd, colorScale
 >     ) where
 
+> import Data.Word
+
 A drawing is a complete image. It is represented as a function
 from a coordinate to a color value.
 
@@ -15,8 +17,8 @@ composing primitives into images incredibly easy.
 The use of the word 'color' here is a little bit inaccurate, as
 this datatype encompasses both color and grayscale values.
 
-> data Color = RGB Float Float Float deriving (Show, Eq, Ord)
+> data Color = RGB Word8 Word8 Word8 deriving (Show, Eq, Ord)
 
-> (RGB a b c) `colorAdd` (RGB x y z) = RGB (hold (a+x)) (hold (b+y)) (hold (c+z))
-> (RGB a b c) `colorScale` s = RGB (hold (a*s)) (hold (b*s)) (hold (c*s))
-> hold x = if x < 0 then 0 else if x > 1 then 1 else x
+> (RGB a b c) `colorAdd` (RGB x y z) = RGB (a+x) (b+y) (c+z)
+> (RGB a b c) `colorScale` s = RGB (scale a) (scale b) (scale c)
+>     where scale x = truncate $ (fromIntegral x) * s
