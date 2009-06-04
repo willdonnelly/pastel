@@ -4,8 +4,13 @@
 >     ) where
 
 > import Graphics.Pastel
+> import Graphics.Pastel.Draw.Raw
 > import Graphics.Pastel.Draw.XPM
 
+> import qualified Data.ByteString as BS
+> import qualified Data.ByteString.Internal as BSI
+> import Data.Bits
+> import Foreign
 > import Graphics.UI.Gtk
 
 This method generates the image data in memory, and then
@@ -16,7 +21,23 @@ docs say that `pixbufCopy` performs a 'deep copy', so
 I interpret this to mean it copies the underlying data.
 
 > drawGtkPixbufRaw :: (Int, Int) -> Drawing -> IO Pixbuf
-> drawGtkPixbufRaw = undefined
+> drawGtkPixbufRaw (w,h) d = withForeignPtr (castForeignPtr ptr) pixbufNewFromInline >>= pixbufCopy
+>     where image = rawOutput (w,h) d
+>           magic = unpack32 0x47646b50 -- Hex for 'GdkP'
+>           length = unpack32 $ fromIntegral $ 24 + (BS.length image) -- Header plus image size
+>           pxdType = unpack32 0x01010001 -- RGB, 8bpp, raw
+>           rowstride = unpack32 $ fromIntegral $ w * 3 -- The row holds 3 bytes per pixel in width
+>           width = unpack32 $ fromIntegral $ w
+>           height = unpack32 $ fromIntegral $ h
+>           header = BS.pack $ concat [magic, length, pxdType, rowstride, width, height]
+>           rawData = BS.append header image
+>           (ptr,_,_) = BSI.toForeignPtr rawData
+
+> unpack32 :: Word32 -> [Word8]
+> unpack32 x = [ fromIntegral $ (`shiftR` 24) $ (fromIntegral x .&. 0xFF000000 :: Word32)
+>              , fromIntegral $ (`shiftR` 16) $ (fromIntegral x .&. 0x00FF0000 :: Word32)
+>              , fromIntegral $ (`shiftR`  8) $ (fromIntegral x .&. 0x0000FF00 :: Word32)
+>              , fromIntegral $ (`shiftR`  0) $ (fromIntegral x .&. 0x000000FF :: Word32) ]
 
 The XPM functionality is pretty straightforward given the
 existence of an XPM output function. The only irregularity

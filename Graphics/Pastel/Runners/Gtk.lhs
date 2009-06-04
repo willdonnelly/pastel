@@ -13,7 +13,7 @@
 >     window <- windowNew
 >     set window [windowTitle := "Pastel Gtk Runner"]
 >
->     pixbuf <- drawGtkPixbufXPM (w,h) $ d
+>     pixbuf <- drawGtkPixbufRaw (w,h) $ d
 >     image <- imageNewFromPixbuf pixbuf
 >     containerAdd window image
 >
