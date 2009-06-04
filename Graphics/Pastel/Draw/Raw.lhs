@@ -3,33 +3,27 @@
 > import Graphics.Pastel
 > import Graphics.Pastel.Draw.Utils
 
-> import qualified Data.ByteString as BS
-> import qualified Data.ByteString.Internal as BSI
+> import Data.ByteString.Internal ( unsafeCreate )
+> import Foreign ( pokeByteOff, plusPtr )
+> import Control.Monad ( foldM )
 
-> import Foreign
-> import Data.Word
-> import System.IO.Unsafe
-> import Control.Monad
+This function is crazy, having gone through several cycles of optimizing.
+Basically, this function:
+  1. Creates a list of all required points from the image, in order
+  2. Allocates a buffer of the right size, and calls `draw` with the pointer
+  3. The draw function does a fold over the points, with a function that
+       writes out the current color and returns the incremented pointer.
 
- rawOutput :: (Int, Int) -> Drawing -> BS.ByteString
- rawOutput (width,height) drawing = BS.pack $ concat $ bytes
-     where bytes = [ cList . drawing $ (x,y)
-                   | y <- evenInterval height
-                   , x <- evenInterval width ]
-           cList (RGB r g b) = [r, g, b]
+The lambda function here is a little confusing. Just remember that folding
+functions have *two* arguments. We just catch the first one in the lambda
+so we can pass it to 'write'. The other (the coordinate) gets passed to
+the image, and the returned color is then passed to write.
 
-> rawOutput (width, height) drawing = unsafePerformIO $ BSI.create bufferSize draw
->     where bufferSize = width * height * 3
->           draw ptr = do foldM (drawColor drawing) ptr [ (x,y) | y <- yList, x <- xList ]
->                         return ()
->               where xList = evenInterval width
->                     yList = evenInterval height
-
-> drawColor :: Drawing -> Ptr Word8 -> (Float, Float) -> IO (Ptr Word8)
-> drawColor drawing ptr = pokeColor ptr . drawing
-
-> pokeColor :: Ptr Word8 -> Color -> IO (Ptr Word8)
-> pokeColor ptr (RGB r g b) = return ptr >>= pokeInc r >>= pokeInc g >>= pokeInc b
->   where pokeInc word ptr = do
->             poke ptr word
->             return $ plusPtr ptr 1
+> rawOutput (width, height) image = unsafeCreate (width * height * 3) draw
+>     where points = [ (x,y) | y<-evenInterval height, x<-evenInterval width ]
+>           draw ptr = do foldM (\p -> write p . image) ptr points
+>                         return () -- << This is a lame requirement.
+>           write ptr (RGB r g b) = do pokeByteOff ptr 0 r
+>                                      pokeByteOff ptr 1 g
+>                                      pokeByteOff ptr 2 b
+>                                      return $ plusPtr ptr 3
