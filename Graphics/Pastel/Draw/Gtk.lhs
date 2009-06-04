@@ -1,5 +1,5 @@
 > module Graphics.Pastel.Draw.Gtk
->     ( drawGtkPixbufRaw
+>     ( drawGtkPixbufRaw, gtkPixdataRaw
 >     , drawGtkPixbufXPM
 >     ) where
 
@@ -11,7 +11,10 @@
 > import qualified Data.ByteString.Internal as BSI
 > import Data.Bits
 > import Foreign
-> import Graphics.UI.Gtk
+
+> --import Graphics.UI.Gtk
+> drawGtkPixbufRaw = undefined
+> drawGtkPixbufXPM = undefined
 
 This method generates the image data in memory, and then
 turns it into a pixbuf using the `pixbufNewFromInline`
@@ -20,8 +23,12 @@ the inline image data, we manually copy it next. The
 docs say that `pixbufCopy` performs a 'deep copy', so
 I interpret this to mean it copies the underlying data.
 
-> drawGtkPixbufRaw :: (Int, Int) -> Drawing -> IO Pixbuf
-> drawGtkPixbufRaw (w,h) d = withForeignPtr (castForeignPtr ptr) pixbufNewFromInline >>= pixbufCopy
+> -- drawGtkPixbufRaw :: (Int, Int) -> Drawing -> IO Pixbuf
+> -- drawGtkPixbufRaw (w,h) d = withForeignPtr (castForeignPtr ptr) pixbufNewFromInline >>= pixbufCopy
+> --     where rawData = gtkPixdataRaw (w, h) d
+> --           (ptr,_,_) = BSI.toForeignPtr rawData
+
+> gtkPixdataRaw (w, h) d = BS.append header image
 >     where image = rawOutput (w,h) d
 >           magic = unpack32 0x47646b50 -- Hex for 'GdkP'
 >           length = unpack32 $ fromIntegral $ 24 + (BS.length image) -- Header plus image size
@@ -30,8 +37,11 @@ I interpret this to mean it copies the underlying data.
 >           width = unpack32 $ fromIntegral $ w
 >           height = unpack32 $ fromIntegral $ h
 >           header = BS.pack $ concat [magic, length, pxdType, rowstride, width, height]
->           rawData = BS.append header image
->           (ptr,_,_) = BSI.toForeignPtr rawData
+
+This looks like a horrendously complicated way to convert a
+Word32 into a [Word8]. It's not. The performance impact has been
+measured at exactly zero. It optimizes into some magic, and ends
+up being less costly than some of the *constants* in this program.
 
 > unpack32 :: Word32 -> [Word8]
 > unpack32 x = [ fromIntegral $ (`shiftR` 24) $ (fromIntegral x .&. 0xFF000000 :: Word32)
@@ -46,6 +56,6 @@ line saying "! XPM2" and consists of a single string with
 newlines, and GTK wants XPM3, which lacks the header and
 has each line in a separate string in an array.
 
-> drawGtkPixbufXPM :: (Int, Int) -> Drawing -> IO Pixbuf
-> drawGtkPixbufXPM (w,h) d = pixbufNewFromXPMData xpmData
->     where xpmData = tail $ lines $ drawPixmap (w,h) d
+> -- drawGtkPixbufXPM :: (Int, Int) -> Drawing -> IO Pixbuf
+> -- drawGtkPixbufXPM (w,h) d = pixbufNewFromXPMData xpmData
+> --     where xpmData = tail $ lines $ drawPixmap (w,h) d
