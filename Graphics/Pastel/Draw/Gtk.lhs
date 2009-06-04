@@ -12,9 +12,9 @@
 > import Data.Bits
 > import Foreign
 
-> --import Graphics.UI.Gtk
-> drawGtkPixbufRaw = undefined
-> drawGtkPixbufXPM = undefined
+> import Graphics.UI.Gtk
+> --drawGtkPixbufRaw = undefined
+> --drawGtkPixbufXPM = undefined
 
 This method generates the image data in memory, and then
 turns it into a pixbuf using the `pixbufNewFromInline`
@@ -23,10 +23,10 @@ the inline image data, we manually copy it next. The
 docs say that `pixbufCopy` performs a 'deep copy', so
 I interpret this to mean it copies the underlying data.
 
-> -- drawGtkPixbufRaw :: (Int, Int) -> Drawing -> IO Pixbuf
-> -- drawGtkPixbufRaw (w,h) d = withForeignPtr (castForeignPtr ptr) pixbufNewFromInline >>= pixbufCopy
-> --     where rawData = gtkPixdataRaw (w, h) d
-> --           (ptr,_,_) = BSI.toForeignPtr rawData
+> drawGtkPixbufRaw :: (Int, Int) -> Drawing -> IO Pixbuf
+> drawGtkPixbufRaw (w,h) d = withForeignPtr (castForeignPtr ptr) pixbufNewFromInline >>= pixbufCopy
+>     where rawData = gtkPixdataRaw (w, h) d
+>           (ptr,_,_) = BSI.toForeignPtr rawData
 
 > gtkPixdataRaw (w, h) d = BS.append header image
 >     where image = rawOutput (w,h) d
@@ -56,6 +56,6 @@ line saying "! XPM2" and consists of a single string with
 newlines, and GTK wants XPM3, which lacks the header and
 has each line in a separate string in an array.
 
-> -- drawGtkPixbufXPM :: (Int, Int) -> Drawing -> IO Pixbuf
-> -- drawGtkPixbufXPM (w,h) d = pixbufNewFromXPMData xpmData
-> --     where xpmData = tail $ lines $ drawPixmap (w,h) d
+> drawGtkPixbufXPM :: (Int, Int) -> Drawing -> IO Pixbuf
+> drawGtkPixbufXPM (w,h) d = pixbufNewFromXPMData xpmData
+>     where xpmData = tail $ lines $ drawPixmap (w,h) d
