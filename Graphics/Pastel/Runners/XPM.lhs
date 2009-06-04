@@ -3,4 +3,4 @@
 > import Graphics.Pastel
 > import Graphics.Pastel.Draw.XPM
 
-> runXPM (w,h) d = putStr $ drawPixmap (w,h) d
+> runXPM = putStr . drawPixmap

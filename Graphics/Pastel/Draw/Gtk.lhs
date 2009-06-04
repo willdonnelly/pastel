@@ -1,7 +1,4 @@
-> module Graphics.Pastel.Draw.Gtk
->     ( drawGtkPixbufRaw, gtkPixdataRaw
->     , drawGtkPixbufXPM
->     ) where
+> module Graphics.Pastel.Draw.Gtk ( drawGtkPixbufRaw, drawGtkPixbufXPM ) where
 
 > import Graphics.Pastel
 > import Graphics.Pastel.Draw.Raw
@@ -13,8 +10,6 @@
 > import Foreign
 
 > import Graphics.UI.Gtk
-> --drawGtkPixbufRaw = undefined
-> --drawGtkPixbufXPM = undefined
 
 This method generates the image data in memory, and then
 turns it into a pixbuf using the `pixbufNewFromInline`
