@@ -13,11 +13,8 @@ import Control.Monad
 drawWXImage :: (Int, Int) -> Drawing -> WX.Image ()
 drawWXImage (w,h) d = unsafePerformIO imageIO
     where imageIO = do buffer <- WX.pixelBufferCreate (WX.Size w h)
-                       foldM drawPoint buffer points
+                       WX.pixelBufferSetPixels buffer pixels
                        WX.imageCreateFromPixelBuffer buffer
-          points = [ (x,y) | y <- zip [0..(succ h)] $ evenInterval h
-                           , x <- zip [0..(succ w)] $ evenInterval w ]
-          drawPoint buffer ((xi,xf),(yi,yf)) = do
-              WX.pixelBufferSetPixel buffer (WX.Point xi yi) $ wxColor $ d (xf,yf)
-              return buffer
+          pixels = [ wxColor . d $ (x,y) | y <- evenInterval h
+                                         , x <- evenInterval w ]
           wxColor (RGB r g b) = WX.rgb (fromIntegral r) (fromIntegral g) (fromIntegral b)
