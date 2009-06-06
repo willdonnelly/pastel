@@ -37,7 +37,7 @@ library
                    Graphics.Pastel.Runners.Gtk,
                    Graphics.Pastel.Runners.WX,
                    Graphics.Pastel.Runners.GD
-  Build-Depends:   array, base, gtk, bytestring, wx, gd, containers
+  Build-Depends:   array, base, gtk, bytestring, wx, wxcore, gd, containers
 
 source-repository head
   type:      git
