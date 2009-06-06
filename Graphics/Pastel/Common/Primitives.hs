@@ -1,4 +1,4 @@
-module Graphics.Pastel.Primitives
+module Graphics.Pastel.Common.Primitives
     ( circle, square, polygon
     , rotate, translate
     , zoom, scale
@@ -6,8 +6,8 @@ module Graphics.Pastel.Primitives
     , tint, canvas
     ) where
 
-import Graphics.Pastel.Types
-import Graphics.Pastel.Colors
+import Graphics.Pastel.Common.Types
+import Graphics.Pastel.Common.Colors
 
 circle :: Color -> Drawing -> Drawing
 circle c f (x,y) = if x*x + y*y < 1.0 then c else f (x,y)

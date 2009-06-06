@@ -1,4 +1,4 @@
-module Graphics.Pastel.Colors
+module Graphics.Pastel.Common.Colors
     ( darkRed, lightRed, red
     , darkOrange, lightOrange, orange
     , darkYellow, lightYellow, yellow
@@ -9,7 +9,7 @@ module Graphics.Pastel.Colors
     , black, white
     ) where
 
-import Graphics.Pastel.Types
+import Graphics.Pastel.Common.Types
 
 -- These types don't come from any definition. I started looking
 -- for one, but ended up concluding it would be faster just to

@@ -1,9 +1,6 @@
-module Graphics.Pastel.Draw.XPM
-    ( drawPixmap
-    ) where
+module Graphics.Pastel.XPM.Draw ( drawXPM ) where
 
 import Graphics.Pastel
-import Graphics.Pastel.Draw.Utils
 
 import Numeric
 import Data.Maybe
@@ -15,8 +12,8 @@ hexOut l x = (replicate padLen '0') ++ hex
     where padLen = l - length hex
           hex = showHex x ""
 
-drawPixmap :: (Int, Int) -> Drawing -> String
-drawPixmap (width, height) drawing = unlines $ concat [[magic], [header], palette, image]
+drawXPM :: (Int, Int) -> Drawing -> String
+drawXPM (width, height) drawing = unlines $ concat [[magic], [header], palette, image]
     where magic = "! XPM2"
           header = unwords $ map show [width, height, pSize, indexSize]
           palette = map paletteLine pLookup

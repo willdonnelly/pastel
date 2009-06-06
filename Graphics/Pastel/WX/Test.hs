@@ -1,16 +1,16 @@
-module Graphics.Pastel.Runners.WX (runWX) where
+module Graphics.Pastel.WX.Test ( testWX ) where
 
 import Graphics.UI.WX hiding (circle)
 import Graphics.UI.WXCore.Image
 
 import Graphics.Pastel
-import Graphics.Pastel.Draw.WX
+import Graphics.Pastel.WX.Draw
 
-runWX :: (Int, Int) -> Drawing -> IO ()
-runWX (w,h) d = start gui
+testWX :: (Int, Int) -> Drawing -> IO ()
+testWX (w,h) d = start gui
     where gui = do
               window <- frame [text := "Pastel WX Runner"]
               canvas <- panel window [on paint := redraw]
               return ()
-          redraw dc viewArea = do image <- drawWXImage (w,h) d
+          redraw dc viewArea = do image <- drawWX (w,h) d
                                   drawImage dc image (Point 0 0) []

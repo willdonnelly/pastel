@@ -1,15 +1,19 @@
-module Graphics.Pastel.Draw.Utils
+module Graphics.Pastel.Common.Draw
    ( colorField, intField
-   , colorToInt, intToColor
+   , rawBuffer
    , evenInterval
    , palettize
    ) where
 
-import Graphics.Pastel
+import Graphics.Pastel.Common.Types
 
 import Data.List
 import qualified Data.Map as Map
 import Data.Bits
+
+import Foreign ( pokeByteOff, plusPtr )
+import Data.ByteString.Internal ( unsafeCreate )
+import Control.Monad ( foldM )
 
 colorField :: (Int, Int) -> Drawing -> [[Color]]
 colorField (width, height) drawing = map line tallIdx
@@ -25,12 +29,6 @@ colorToInt (RGB r g b) = r' .|. g' .|. b'
     where r' = fromIntegral $ r `shiftL` 16
           g' = fromIntegral $ g `shiftL` 8
           b' = fromIntegral $ b
-
-intToColor :: Int -> Color
-intToColor x = RGB r g b
-    where r = fromIntegral $ x .&. 0xFF0000 `shiftR` 16
-          g = fromIntegral $ x .&. 0x00FF00 `shiftR` 8
-          b = fromIntegral $ x .&. 0x0000FF
 
 evenInterval :: Int -> [Float]
 evenInterval n = map (scale . shift) $ take n [0..]
@@ -55,3 +53,12 @@ paletteFold (output, table, number) value =
 output :: ([Int], Map.Map Int Int, Int) -> ([Int], [(Int, Int)], Int)
 output (output, table, number) = (reverse output, reversePairs $ Map.assocs table, number)
     where reversePairs = map (\(x,y) -> (y,x))
+
+rawBuffer (width, height) image = unsafeCreate (width * height * 3) draw
+    where points = [ (x,y) | y<-evenInterval height, x<-evenInterval width ]
+          draw ptr = do foldM (\p -> write p . image) ptr points
+                        return () -- << This is a lame requirement.
+          write ptr (RGB r g b) = do pokeByteOff ptr 0 r
+                                     pokeByteOff ptr 1 g
+                                     pokeByteOff ptr 2 b
+                                     return $ plusPtr ptr 3

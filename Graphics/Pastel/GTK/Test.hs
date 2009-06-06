@@ -1,19 +1,19 @@
-module Graphics.Pastel.Runners.Gtk (runGtk) where
+module Graphics.Pastel.GTK.Test ( testGTK ) where
 
 import Graphics.UI.Gtk
 import Graphics.UI.Gtk.Gdk.Events
 
 import Graphics.Pastel
-import Graphics.Pastel.Draw.Gtk
+import Graphics.Pastel.GTK.Draw
 
-runGtk :: (Int, Int) -> Drawing -> IO ()
-runGtk (w,h) d = do
+testGTK :: (Int, Int) -> Drawing -> IO ()
+testGTK (w,h) d = do
     initGUI
     
     window <- windowNew
     set window [windowTitle := "Pastel Gtk Runner"]
     
-    pixbuf <- drawGtkPixbufRaw (w,h) $ d
+    pixbuf <- drawGTK (w,h) $ d
     image <- imageNewFromPixbuf pixbuf
     containerAdd window image
     

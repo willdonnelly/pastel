@@ -1,4 +1,4 @@
-module Graphics.Pastel.Types
+module Graphics.Pastel.Common.Types
     ( Drawing, Shape, Color (..), colorAdd, colorScale
     ) where
 
