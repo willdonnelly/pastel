@@ -1,0 +1,76 @@
+Pastel - A Fast, Composable Image Library
+=========================================
+
+Pastel is an image generation and manipulation library written in
+Haskell. It is designed for speed and library integration, as well
+as elegance of use.
+
+Getting Started With Pastel
+---------------------------
+
+Before you can use it, you will of course have to import
+`Graphics.Pastel`.
+
+Pastel models a drawing as a function from a coordinate in a 2D plane
+to a color value.
+
+The simplest drawing is a blank, solid-color canvas. A canvas can be
+created with the `canvas <color>` function.
+
+Other, more complicated drawings can be created by composing and
+applying various graphics primitives to the basic canvas. All of the
+basic shapes and transformations are modeled as functions from one
+drawing to another.
+
+Some basic primitives include `circle`, `square`, `gradientLinear`,
+and `gradientRadial`. All of these primitives require a color as an
+argument. Some basic transformations include `zoom`, `scale`,
+`rotate`, and `translate`.
+
+Displaying Images
+-----------------
+
+Pastel has a variety of image output methods, which are imported as
+`Graphics.Pastel.Draw.<Method>`.
+
+For simple testing purposes, though, you will want to load a 'runner'.
+The runners are basic functions which will handle to complexities of
+setting up windowing or file access, and allow you to quickly test
+some images.
+
+The recommended runner is 'Gtk', as it is the fastest. To use it,
+simply import `Graphics.Pastel.Runners.Gtk`, and call it as
+`runGtk (width, height) drawing`. A window will automatically be
+created and the image will be drawn for you.
+
+When your needs become more complex, you will want to use the draw
+methods directly. When that happens, a simple look at the function's
+type signature ought to make it clear how to use it.
+
+Pastel Roadmap
+==============
+
+Pastel is still a work in progress. Current plans for the library
+include:
+
+  * Tweak performance of the graphics primitives.
+
+  * Possibly move `rawOutput` into Draw.Utils, as it's not
+    really a viable output method on its own.
+
+  * Improve speed of the WxWidgets draw method.
+
+  * PNG files would be useful to output, too.
+  
+  * Maybe integrade with the Haskell GD bindings?
+
+  * Upload on github
+
+  * We'll need to read input from files eventually, too.
+
+  * Learn more about separating IO modules from the rest of
+    the library, so I can build it without GTK if I choose.
+
+  * Win32 support might be a plus
+
+  * Upload to hackage
