@@ -1,9 +1,6 @@
 module Main where
 
 import Graphics.Pastel
---import Graphics.Pastel.Runners.Gtk
-import Graphics.Pastel.Runners.Raw
+import Graphics.Pastel.Runners.GD
 
--- main = runRaw (400,400) $ zoom 4 $ circle purple $ zoom 0.5 $ gradientLinear blue $ gradientRadial green $ canvas white
-
-main = runRaw (1280,800) $ zoom 4 $ circle purple $ zoom 0.5 $ gradientRadial blue $ canvas white
+main = runGD (1280,800) $ zoom 4 $ circle purple $ zoom 0.5 $ canvas white
