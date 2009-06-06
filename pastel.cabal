@@ -33,7 +33,7 @@ library
                    Graphics.Pastel.Draw.Utils,
                    Graphics.Pastel.Runners.XPM,
                    Graphics.Pastel.Runners.Gtk
-  Build-Depends:   array, base, gtk
+  Build-Depends:   array, base, gtk, bytestring, wx, gd, containers
 
 source-repository head
   type:      git
