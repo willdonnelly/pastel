@@ -7,5 +7,6 @@ import Graphics.GD
 
 import qualified Data.ByteString as BS
 
-runGD (w,h) d = do bs <- savePngByteString $ gdOutput (w,h) d
+runGD (w,h) d = do image <- gdOutput (w,h) d
+                   bs <- savePngByteString image
                    BS.putStrLn bs
