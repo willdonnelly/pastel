@@ -55,14 +55,6 @@ include:
 
   * Tweak performance of the graphics primitives.
 
-  * Improve speed of the WxWidgets draw method.
-
-  * PNG files would be useful to output, too.
-  
-  * Maybe integrade with the Haskell GD bindings?
-
-  * Upload on github
-
   * We'll need to read input from files eventually, too.
 
   * Learn more about separating IO modules from the rest of the
