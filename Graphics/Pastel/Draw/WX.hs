@@ -8,13 +8,11 @@ import Graphics.Pastel
 import Graphics.Pastel.Draw.Utils
 
 import System.IO.Unsafe
-import Control.Monad
 
 drawWXImage :: (Int, Int) -> Drawing -> WX.Image ()
-drawWXImage (w,h) d = unsafePerformIO imageIO
-    where imageIO = do buffer <- WX.pixelBufferCreate (WX.Size w h)
-                       WX.pixelBufferSetPixels buffer pixels
-                       WX.imageCreateFromPixelBuffer buffer
-          pixels = [ wxColor . d $ (x,y) | y <- evenInterval h
-                                         , x <- evenInterval w ]
-          wxColor (RGB r g b) = WX.rgb (fromIntegral r) (fromIntegral g) (fromIntegral b)
+drawWXImage (w,h) d = unsafePerformIO image
+    where image = WX.imageCreateFromPixels (WX.Size w h) pixels
+          pixels = map (wxColor . d) points
+          points = [(x,y) | y <- evenInterval h, x <- evenInterval w]
+
+wxColor (RGB r g b) = WX.rgb (fromIntegral r) (fromIntegral g) (fromIntegral b)
