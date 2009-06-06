@@ -1,18 +1,15 @@
 module Graphics.Pastel.Draw.WX ( drawWXImage ) where
 
-import qualified Graphics.UI.WX as WX
-import qualified Graphics.UI.WXCore.Image as WX
-import qualified Graphics.UI.WXCore.WxcClassTypes as WX
+import Graphics.UI.WXCore.Types ( sz )
+import Graphics.UI.WXCore.WxcClassTypes ( Image )
+import Graphics.UI.WXCore.WxcClassesAL ( imageCreateFromData )
 
-import Graphics.Pastel
-import Graphics.Pastel.Draw.Utils
+import Graphics.Pastel (Drawing)
+import Graphics.Pastel.Draw.Raw (rawOutput)
 
-import System.IO.Unsafe
+import Data.ByteString.Internal (toForeignPtr)
+import Foreign (withForeignPtr)
 
-drawWXImage :: (Int, Int) -> Drawing -> WX.Image ()
-drawWXImage (w,h) d = unsafePerformIO image
-    where image = WX.imageCreateFromPixels (WX.Size w h) pixels
-          pixels = map (wxColor . d) points
-          points = [(x,y) | y <- evenInterval h, x <- evenInterval w]
-
-wxColor (RGB r g b) = WX.rgb (fromIntegral r) (fromIntegral g) (fromIntegral b)
+drawWXImage :: (Int, Int) -> Drawing -> IO (Image ())
+drawWXImage (w,h) d = withForeignPtr ptr $ imageCreateFromData (sz w h)
+    where (ptr,_,_) = toForeignPtr $ rawOutput (w,h) d

@@ -12,5 +12,5 @@ runWX (w,h) d = start gui
               window <- frame [text := "Pastel WX Runner"]
               canvas <- panel window [on paint := redraw]
               return ()
-          redraw dc viewArea = let image = drawWXImage (w,h) d in
-                                   drawImage dc image (Point 0 0) []
+          redraw dc viewArea = do image <- drawWXImage (w,h) d
+                                  drawImage dc image (Point 0 0) []

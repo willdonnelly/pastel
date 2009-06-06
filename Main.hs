@@ -1,6 +1,6 @@
 module Main where
 
 import Graphics.Pastel
-import Graphics.Pastel.Runners.GD
+import Graphics.Pastel.Runners.WX
 
-main = runGD (1280,800) $ zoom 4 $ circle purple $ zoom 0.5 $ canvas white
+main = runWX (1280,800) $ zoom 4 $ circle purple $ zoom 0.5 $ canvas white
