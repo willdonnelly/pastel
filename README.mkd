@@ -8,19 +8,23 @@ as elegance of use.
 Getting Started With Pastel
 ---------------------------
 
-Before you can use it, you will of course have to import
-`Graphics.Pastel`.
+The main functionality of the library is imported as `Graphics.Pastel`.
+Additionally, support for an output method will need to be imported
+from `Graphics.Pastel.<Method>`, where `<Method>` is one of:
+  * GD
+  * GTK
+  * WX
 
 Pastel models a drawing as a function from a coordinate in a 2D plane
-to a color value.
+to a color value. Complex drawings can be created by applying various
+graphics primitives simpler drawings.
 
 The simplest drawing is a blank, solid-color canvas. A canvas can be
-created with the `canvas <color>` function.
+created with the `canvas` function, which has type `Color -> Drawing`.
+Other shapes can be drawn on the canvas through function composition.
 
-Other, more complicated drawings can be created by composing and
-applying various graphics primitives to the basic canvas. All of the
-basic shapes and transformations are modeled as functions from one
-drawing to another.
+For example, `circle blue $ canvas white` will create an image of a
+blue circle on top of a white canvas.
 
 Some basic primitives include `circle`, `square`, `gradientLinear`,
 and `gradientRadial`. All of these primitives require a color as an
@@ -30,22 +34,19 @@ argument. Some basic transformations include `zoom`, `scale`,
 Displaying Images
 -----------------
 
-Pastel has a variety of image output methods, which are imported as
-`Graphics.Pastel.Draw.<Method>`.
+The `Graphics.Pastel.GTK` library will be used here for example
+purposes. The function naming convention for the other methods
+should be obvious.
 
-For simple testing purposes, though, you will want to load a 'runner'.
-The runners are basic functions which will handle to complexities of
-setting up windowing or file access, and allow you to quickly test
-some images.
+There are two ways of displaying images with Pastel. The `drawGTK`
+function will take two arguments, a resolution and a drawing, and
+return a GTK Pixbuf which can be converted to an image and drawn
+to a window.
 
-The recommended runner is 'Gtk', as it is the fastest. To use it,
-simply import `Graphics.Pastel.Runners.Gtk`, and call it as
-`runGtk (width, height) drawing`. A window will automatically be
-created and the image will be drawn for you.
-
-When your needs become more complex, you will want to use the draw
-methods directly. When that happens, a simple look at the function's
-type signature ought to make it clear how to use it.
+For simple testing purposes, though, you will want to use the
+`testGTK` function. This function handles the complexity of
+creating a GTK window and drawing the image. It takes the same
+arguments as the `drawGTK` function.
 
 Pastel Roadmap
 ==============
