@@ -53,13 +53,14 @@ Pastel Roadmap
 Pastel is still a work in progress. Current plans for the library
 include:
 
-  * Tweak performance of the graphics primitives.
-
-  * We'll need to read input from files eventually, too.
-
   * Learn more about separating IO modules from the rest of the
-    library, so I can build it without GTK / WX if I choose to.
-
-  * Win32 support might be a plus
+    library, so it can be built without GTK / WX / GD if desired.
 
   * Upload to hackage
+
+  * Win32 Support
+
+  * Image file loading support (if Graphics.GD ever gets a `gdImageGetPixel`
+    function to match `gdImageSetPixel`)
+
+  * Improve performance of primitives
