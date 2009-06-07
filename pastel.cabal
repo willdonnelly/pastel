@@ -27,17 +27,13 @@ Cabal-Version: >= 1.2
 
 library
   Exposed-Modules: Graphics.Pastel,
-                   Graphics.Pastel.Draw.Utils,
-                   Graphics.Pastel.Draw.XPM,
-                   Graphics.Pastel.Draw.Gtk,
-                   Graphics.Pastel.Draw.WX,
-                   Graphics.Pastel.Draw.GD,
-                   Graphics.Pastel.Draw.Ascii,
-                   Graphics.Pastel.Runners.XPM,
-                   Graphics.Pastel.Runners.Gtk,
-                   Graphics.Pastel.Runners.WX,
-                   Graphics.Pastel.Runners.GD
-  Build-Depends:   array, base, gtk, bytestring, wx, wxcore, gd, containers
+                   Graphics.Pastel.GD,
+                   Graphics.Pastel.GTK,
+                   Graphics.Pastel.WX,
+                   Graphics.Pastel.XPM
+  Build-Depends:   array, base, bytestring,
+                   containers, gd, gtk,
+                   wx, wxcore
 
 source-repository head
   type:      git
