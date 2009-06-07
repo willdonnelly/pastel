@@ -11,8 +11,11 @@ Getting Started With Pastel
 The main functionality of the library is imported as `Graphics.Pastel`.
 Additionally, support for an output method will need to be imported
 from `Graphics.Pastel.<Method>`, where `<Method>` is one of:
+
   * GD
+
   * GTK
+
   * WX
 
 Pastel models a drawing as a function from a coordinate in a 2D plane
